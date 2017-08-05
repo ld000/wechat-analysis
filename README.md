@@ -22,6 +22,7 @@ TODO 补图。。。。。。。。
 
 ## TODO list
 
+- 代码优化
 - 数据发送方式：express 服务器 或者 替换到 js 文件里？
 - pages webpack
 - 用户名 MD5 解析
