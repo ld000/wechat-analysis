@@ -18,7 +18,9 @@
   },
   "homepage": "https://github.com/ld000/wechat-analysis#readme",
   "dependencies": {
+    "fs": "0.0.1-security",
     "moment": "^2.18.1",
+    "path": "^0.12.7",
     "sqlite3": "^3.1.9"
   }
 }

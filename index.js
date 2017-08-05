@@ -1,4 +1,8 @@
 const sqlite3 = require('sqlite3').verbose()
+const fs = require('fs')
+const path = require('path')
+const moment = require('moment')
+
 const db = new sqlite3.Database('./data/MM.sqlite')
 
 const TABLE_NAME = 'Chat_afa40067cf83d63eb9fbdc2933ae463d'
@@ -18,7 +22,7 @@ const TYPES = {
 
 var result = {}
 
-function subMsg(msg, type, des) {
+function subMsg(msg, time, type, des) {
   let msgList
   let nickName
   let message
@@ -37,9 +41,15 @@ function subMsg(msg, type, des) {
 
   let tempList = result[nickName]
   if (tempList) {
-    tempList.push(message)
+    tempList.push({
+      time: time,
+      msg: message
+    })
   } else {
-    result[nickName] = [message]
+    result[nickName] = [{
+      time: time,
+      msg: message
+    }]
   }
 }
 
@@ -67,6 +77,20 @@ function switchType(msg, type) {
   return msg
 }
 
+function delDir(path) {
+  if (fs.existsSync(path)) {
+    fs.readdirSync(path).forEach(function(file,index) {
+      var curPath = path + "/" + file
+      if(fs.lstatSync(curPath).isDirectory()) { // recurse
+        deleteFolderRecursive(curPath)
+      } else { // delete file
+        fs.unlinkSync(curPath)
+      }
+    })
+    fs.rmdirSync(path)
+  }
+}
+
 db.serialize(function() {
   db.each('SELECT CreateTime, Message, Type, Des FROM ' + TABLE_NAME, function(err, row) {
     if (row.Type === TYPES.systemMsg
@@ -76,10 +100,70 @@ db.serialize(function() {
       return false
     }
 
-    subMsg(row.Message, row.Type, row.Des)
+    subMsg(row.Message, row.CreateTime, row.Type, row.Des)
   })
 })
 
 db.close(() => {
-  // console.log(result)
+  // pie
+  // let pieData = {
+  //   values: [],
+  //   labels: []
+  // }
+  //
+  // for (let key in result) {
+  //   pieData.values.push(result[key].length)
+  //   pieData.labels.push(key)
+  // }
+  //
+  // console.log(pieData)
+  //
+  // // fs.readFile(path.join(__dirname, 'pages/pie.js'), 'utf8', function (err,data) {
+  // //   if (err) {
+  // //     return console.log(err)
+  // //   }
+  // //
+  // //   var result = data.replace('{{ data }}', JSON.stringify(pieData))
+  // //
+  // //   fs.writeFile(someFile, result, 'utf8', function (err) {
+  // //      if (err) return console.log(err)
+  // //   })
+  // // })
+
+
+
+  // bar
+  // 0-6 6-8 8-10 10-12 ...
+  let barData = {
+    x: ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22-24'],
+    y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+    name: '',
+    type: 'bar'
+  }
+
+  for (let key in result) {
+    let obj = Object.assign({}, barData, { name: key, y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] })
+
+    result[key].map(e => {
+      let hour = moment.unix(e.time).hour()
+
+      let index = Math.floor(hour / 2)
+      obj.y[index]++
+    })
+
+    console.log(obj)
+  }
+
+
+
+  // const dir = path.join(__dirname, 'pages/json')
+  // // delDir(dir)
+  //
+  // fs.mkdirSync(dir)
+  // fs.writeFile(path.join(__dirname, 'pages/json/result.json'), JSON.stringify(result), err => {
+  //   if (err) {
+  //     console.log(err)
+  //     throw err
+  //   }
+  // })
 })
