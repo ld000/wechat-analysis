@@ -1,0 +1,24 @@
+{
+  "name": "wechat-analysis",
+  "version": "1.0.0",
+  "description": "微信聊天记录分析",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ld000/wechat-analysis.git"
+  },
+  "author": "lidong9144@163.com",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ld000/wechat-analysis/issues"
+  },
+  "homepage": "https://github.com/ld000/wechat-analysis#readme",
+  "dependencies": {
+    "moment": "^2.18.1",
+    "sqlite3": "^3.1.9"
+  }
+}
