@@ -30,4 +30,5 @@ TODO 补图。。。。。。。。
 - 信息类型 chart
 - 表情 chart
 - user tags
+- es?
 - 。。。
