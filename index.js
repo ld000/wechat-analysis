@@ -2,6 +2,7 @@ const sqlite3 = require('sqlite3').verbose()
 const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
+const nodejieba = require("nodejieba")
 
 const db = new sqlite3.Database('./data/MM.sqlite')
 
@@ -59,7 +60,7 @@ function switchType(msg, type) {
   }
 
   if (type === TYPES.emoji) {
-    return ['emoji']
+    return '[emoji]'
   }
 
   if (type === TYPES.voipinviteMsg) {
@@ -133,27 +134,67 @@ db.close(() => {
 
 
   // bar
-  // 0-6 6-8 8-10 10-12 ...
-  let barData = {
-    x: ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22-24'],
-    y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    name: '',
-    type: 'bar'
-  }
+  // let barData = {
+  //   x: ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22-24'],
+  //   y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+  //   name: '',
+  //   type: 'bar'
+  // }
+  //
+  // for (let key in result) {
+  //   let obj = Object.assign({}, barData, { name: key, y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] })
+  //
+  //   result[key].map(e => {
+  //     let hour = moment.unix(e.time).hour()
+  //
+  //     let index = Math.floor(hour / 2)
+  //     obj.y[index]++
+  //   })
+  //
+  //   console.log(obj)
+  // }
+
+
+  nodejieba.load({
+    userDict: './dict/user.dict.utf8',
+  });
 
   for (let key in result) {
-    let obj = Object.assign({}, barData, { name: key, y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] })
+    let obj = {}
 
     result[key].map(e => {
-      let hour = moment.unix(e.time).hour()
+      let cut = nodejieba.cut(e.msg)
 
-      let index = Math.floor(hour / 2)
-      obj.y[index]++
+      cut.map(el => {
+        let count = obj[el]
+        if (count) {
+          count++
+          obj[el] = count
+        } else {
+          obj[el] = 1
+        }
+      })
     })
 
-    console.log(obj)
-  }
+    let list = []
+    for (let key2 in obj) {
+      list.push({
+        text: key2,
+        size: obj[key2]
+      })
+    }
 
+    list.sort(function(a,b) {
+     return b.size - a.size
+    })
+    list = list.slice(0, 250)
+
+    fs.writeFile(path.join(__dirname, key + '.result.json'), JSON.stringify(list), err => {
+      if (err) {
+        throw err
+      }
+    })
+  }
 
 
   // const dir = path.join(__dirname, 'pages/json')
