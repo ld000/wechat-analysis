@@ -13,27 +13,45 @@
     <div class="main">
       <h2>微信聊天记录分析</h2>
       <div id="msgNumChart"></div>
-      <div id="bar"></div>
+      <div id="timeChart"></div>
+      <div id="atCountChart"></div>
     </div>
     <script type="text/javascript">
-      var layout = {
-        title: '信息条数',
-        height: 400,
-        width: 500
+      renderMsgNumChart()
+      renderTimeChart()
+      renderAtCountChart()
+
+      function renderMsgNumChart() {
+        var layout = {
+          title: '信息条数',
+          height: 400,
+          width: 500
+        }
+
+        Plotly.newPlot('msgNumChart', msgNumData, layout)
       }
 
-      Plotly.newPlot('msgNumChart', msgNumData, layout)
+      function renderTimeChart() {
+        var layout = {
+          title: '发信息时间',
+          xaxis: {
+            tickangle: -45,
+            type: 'category'
+          },
+          barmode: 'group'
+        }
 
-      var barLayout = {
-        title: '发信息时间',
-        xaxis: {
-          tickangle: -45,
-          type: 'category'
-        },
-        barmode: 'group'
+        Plotly.newPlot('timeChart', timeData, layout)
       }
 
-      Plotly.newPlot('bar', timeData, barLayout)
+      function renderAtCountChart() {
+        var layout = {
+          title: '@次数',
+          barmode: 'stack'
+        }
+
+        Plotly.newPlot('atCountChart', atCountData, layout)
+      }
 
       var frequency_list = [{"text":"…","size":894},{"text":"。","size":883},{"text":"了","size":271},{"text":"我","size":246},{"text":"的","size":184},{"text":"啊","size":150},{"text":"[emoji]","size":144},{"text":"？","size":126},{"text":"，","size":119},{"text":"你","size":104},{"text":" ","size":101},{"text":"去","size":100},{"text":"是","size":94},{"text":"@","size":90},{"text":"康","size":86},{"text":"恺","size":85},{"text":"不","size":84},{"text":"就","size":80},{"text":" ","size":68},{"text":"吧","size":66},{"text":"在","size":60},{"text":"[捂脸]","size":56},{"text":"都","size":55},{"text":"也","size":54},{"text":"吃","size":51},{"text":"个","size":51},{"text":"没","size":47},{"text":"好","size":46},{"text":"说","size":45},{"text":"栋","size":40},{"text":"要","size":38},{"text":"么","size":37},{"text":"@餃子的大宇宙","size":37},{"text":"还","size":36},{"text":"今天","size":36},{"text":"emmmm","size":35},{"text":"[picture]","size":34},{"text":"这","size":33},{"text":"来","size":33},{"text":"[奸笑]","size":33},{"text":"那","size":32},{"text":"李栋","size":32},{"text":"有","size":32},{"text":"现在","size":31},{"text":"人","size":30},{"text":"/","size":29},{"text":"到","size":28},{"text":"就是","size":28},{"text":"s","size":27},{"text":"哦","size":27},{"text":"@明徽","size":27},{"text":"i","size":26},{"text":"胖","size":26},{"text":"%","size":25},{"text":"a","size":25},{"text":"公司","size":25},{"text":"什么","size":25},{"text":"0","size":25},{"text":"二","size":25},{"text":"静思","size":24},{"text":"这个","size":24},{"text":"p","size":24},{"text":"你们","size":24},{"text":"看","size":24},{"text":"嘛","size":23},{"text":"o","size":23},{"text":"一个","size":23},{"text":"给","size":22},{"text":"明天","size":22},{"text":"嗯","size":22},{"text":"中午","size":22},{"text":"健身","size":21},{"text":"想","size":21},{"text":"又","size":20},{"text":"1","size":20},{"text":"得","size":20},{"text":"上","size":20},{"text":"啥","size":20},{"text":"买","size":20},{"text":"不要","size":19},{"text":"n","size":19},{"text":"还是","size":19},{"text":"可以","size":19},{"text":"t","size":19},{"text":"感觉","size":19},{"text":"刚刚","size":18},{"text":"h","size":18},{"text":"他","size":18},{"text":"e","size":18},{"text":"走","size":18},{"text":"那个","size":18},{"text":"c","size":17},{"text":"东西","size":17},{"text":"找","size":17},{"text":"用","size":16},{"text":"多","size":16},{"text":"4","size":16},{"text":"我们","size":16},{"text":"能","size":16},{"text":"吃饭","size":15},{"text":"跟","size":15},{"text":"觉得","size":15},{"text":".","size":15},{"text":"d","size":15},{"text":"回家","size":15},{"text":"群","size":15},{"text":"点","size":14},{"text":"把","size":14},{"text":"再","size":14},{"text":"@Marz","size":14},{"text":"完","size":14},{"text":"E","size":14},{"text":"明徽","size":13},{"text":"会","size":13},{"text":"不是","size":13},{"text":"怎么","size":13},{"text":"8","size":13},{"text":"已经","size":13},{"text":"晚上","size":13},{"text":"有点","size":13},{"text":"自己","size":13},{"text":"写","size":13},{"text":"所以","size":13},{"text":"吗","size":13},{"text":"大概","size":13},{"text":"r","size":12},{"text":"很","size":12},{"text":"b","size":12},{"text":"u","size":12},{"text":"emmmmm","size":12},{"text":"问","size":12},{"text":"一起","size":12},{"text":"l","size":12},{"text":"呢","size":12},{"text":"着","size":12},{"text":"咱们","size":11},{"text":"\n","size":11},{"text":"有没有","size":11},{"text":"派","size":11},{"text":"5","size":11},{"text":"亚","size":11},{"text":"时候","size":11},{"text":"然后","size":11},{"text":"m","size":11},{"text":"小","size":10},{"text":"行","size":10},{"text":"！","size":10},{"text":"和","size":10},{"text":"看看","size":10},{"text":"工作","size":10},{"text":"好像","size":10},{"text":"做","size":10},{"text":"加餐","size":10},{"text":"回来","size":10},{"text":"不能","size":10},{"text":"回","size":10},{"text":"跑步","size":10},{"text":"树莓","size":10},{"text":"里","size":10},{"text":"搞","size":10},{"text":"鹏飞","size":9},{"text":"去不去","size":9},{"text":"媳妇儿","size":9},{"text":"陆薇","size":9},{"text":"B","size":9},{"text":"啦","size":9},{"text":"早上","size":9},{"text":"带","size":9},{"text":"过来","size":9},{"text":"孙","size":9},{"text":"庆","size":9},{"text":"是不是","size":9},{"text":"让","size":9},{"text":"妹子","size":9},{"text":"对","size":9},{"text":"6","size":9},{"text":"这种","size":9},{"text":"叫","size":9},{"text":"咋","size":9},{"text":"装","size":9},{"text":"呗","size":9},{"text":"代码","size":9},{"text":"咔","size":8},{"text":"没有","size":8},{"text":"还有","size":8},{"text":"真是","size":8},{"text":"饿","size":8},{"text":"开会","size":8},{"text":"emmm","size":8},{"text":"2","size":8},{"text":"今晚","size":8},{"text":"不好","size":8},{"text":"田","size":8},{"text":"一下","size":8},{"text":"7","size":8},{"text":"不用","size":8},{"text":"大家","size":8},{"text":"：","size":8},{"text":"间","size":8},{"text":"茶水","size":8},{"text":"啥时候","size":8},{"text":"v","size":8},{"text":":","size":7},{"text":"完全","size":7},{"text":"不会","size":7},{"text":"帮","size":7},{"text":"俩","size":7},{"text":"玩","size":7},{"text":"这么","size":7},{"text":"老师","size":7},{"text":"谁","size":7},{"text":"电脑","size":7},{"text":"以后","size":7},{"text":"组","size":7},{"text":"直接","size":7},{"text":"3","size":7},{"text":"她","size":7},{"text":"订","size":7},{"text":"特","size":7},{"text":"这样","size":7},{"text":"反正","size":7},{"text":"知道","size":7},{"text":"不想","size":7},{"text":"可能","size":7},{"text":"一会儿","size":7},{"text":"饼","size":6},{"text":"铁","size":6},{"text":"起床","size":6},{"text":"小时","size":6},{"text":"出来","size":6},{"text":"加班","size":6},{"text":"[皱眉]","size":6},{"text":"快","size":6},{"text":"事儿","size":6},{"text":"[机智]","size":6},{"text":"话","size":6},{"text":"上班","size":6},{"text":"家里","size":6},{"text":"卷","size":6},{"text":"一直","size":6},{"text":"u盘","size":6},{"text":"回去","size":6},{"text":"新","size":6},{"text":"忙","size":6},{"text":"只能","size":6},{"text":"k","size":6},{"text":"送","size":6},{"text":"孙岚","size":6},{"text":"早点","size":6},{"text":"A","size":6}]
 

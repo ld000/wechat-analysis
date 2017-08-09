@@ -6,6 +6,7 @@ import moment from 'moment'
 const init = () => {
   let str = 'var msgNumData = $msgNumData\n'
   str += 'var timeData = $timeData\n'
+  str += 'var atCountData = $atCountData\n'
 
   fs.writeFileSync(path.join(__dirname, '../pages/data.js'), str, 'utf8')
 }
@@ -28,15 +29,13 @@ const genMsgNumData = (result) => {
 const genTimeData = (result) => {
   let list = []
 
-  let barData = {
-    x: ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22-24'],
-    y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-    name: '',
-    type: 'bar'
-  }
-
   for (let key in result) {
-    let obj = Object.assign({}, barData, { name: key, y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] })
+    let obj = {
+      x: ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22-24'],
+      y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
+      name: key,
+      type: 'bar'
+    }
 
     result[key].map(e => {
       let hour = moment.unix(e.time).hour()
@@ -51,4 +50,39 @@ const genTimeData = (result) => {
   utils.replaceData(path.join(__dirname, '../pages/data.js'), '$timeData', JSON.stringify(list))
 }
 
-export default { init, genMsgNumData, genTimeData }
+const genAtCountData = (result) => {
+  let list = []
+
+  for (let key in result) {
+    let obj = {
+      x: [],
+      y: [],
+      name: key,
+      type: 'bar'
+    }
+
+    let tmpObj = {}
+    result[key].map(e => {
+      const count = utils.getAtCount(e.msg)
+
+      for (let atKey in count) {
+        if (tmpObj[atKey]) {
+          tmpObj[atKey] = tmpObj[atKey] + count[atKey]
+        } else {
+          tmpObj[atKey] = count[atKey]
+        }
+      }
+    })
+
+    for (let tmpKey in tmpObj) {
+      obj.x.push(tmpKey)
+      obj.y.push(tmpObj[tmpKey])
+    }
+
+    list.push(obj)
+  }
+
+  utils.replaceData(path.join(__dirname, '../pages/data.js'), '$atCountData', JSON.stringify(list))
+}
+
+export default { init, genMsgNumData, genTimeData, genAtCountData }

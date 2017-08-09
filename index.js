@@ -82,6 +82,7 @@ db.close(() => {
 
   initData.genMsgNumData(result)
   initData.genTimeData(result)
+  initData.genAtCountData(result)
 
 
   // nodejieba.load({
