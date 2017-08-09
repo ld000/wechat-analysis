@@ -1,10 +1,9 @@
-const sqlite3 = require('sqlite3').verbose()
-const fs = require('fs')
-const path = require('path')
-const moment = require('moment')
-const nodejieba = require("nodejieba")
-const initData = require('./src/initData.js')
+import fs from 'fs'
+import path from 'path'
+import nodejieba from "nodejieba"
+import initData from './src/initData.js'
 
+const sqlite3 = new require('sqlite3').verbose()
 const db = new sqlite3.Database('./data/MM.sqlite')
 
 const TABLE_NAME = 'Chat_afa40067cf83d63eb9fbdc2933ae463d'
@@ -79,20 +78,6 @@ function switchType(msg, type) {
   return msg
 }
 
-function delDir(path) {
-  if (fs.existsSync(path)) {
-    fs.readdirSync(path).forEach(function(file,index) {
-      var curPath = path + "/" + file
-      if(fs.lstatSync(curPath).isDirectory()) { // recurse
-        deleteFolderRecursive(curPath)
-      } else { // delete file
-        fs.unlinkSync(curPath)
-      }
-    })
-    fs.rmdirSync(path)
-  }
-}
-
 db.serialize(function() {
   db.each('SELECT CreateTime, Message, Type, Des FROM ' + TABLE_NAME, function(err, row) {
     if (row.Type === TYPES.systemMsg
@@ -153,16 +138,4 @@ db.close(() => {
   //     }
   //   })
   // }
-
-
-  // const dir = path.join(__dirname, 'pages/json')
-  // // delDir(dir)
-  //
-  // fs.mkdirSync(dir)
-  // fs.writeFile(path.join(__dirname, 'pages/json/result.json'), JSON.stringify(result), err => {
-  //   if (err) {
-  //     console.log(err)
-  //     throw err
-  //   }
-  // })
 })

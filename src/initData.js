@@ -1,16 +1,16 @@
-const fs = require('fs')
-const path = require('path')
-const utils = require('./utils.js')
-const moment = require('moment')
+import fs from 'fs'
+import path from 'path'
+import utils from './utils.js'
+import moment from 'moment'
 
-exports.init = function() {
+const init = () => {
   let str = 'var msgNumData = $msgNumData\n'
   str += 'var timeData = $timeData\n'
 
   fs.writeFileSync(path.join(__dirname, '../pages/data.js'), str, 'utf8')
 }
 
-exports.genMsgNumData = function(result) {
+const genMsgNumData = (result) => {
   let pieData = {
     values: [],
     labels: [],
@@ -25,7 +25,7 @@ exports.genMsgNumData = function(result) {
   utils.replaceData(path.join(__dirname, '../pages/data.js'), '$msgNumData', JSON.stringify([pieData]))
 }
 
-exports.genTimeData = function(result) {
+const genTimeData = (result) => {
   let list = []
 
   let barData = {
@@ -50,3 +50,5 @@ exports.genTimeData = function(result) {
 
   utils.replaceData(path.join(__dirname, '../pages/data.js'), '$timeData', JSON.stringify(list))
 }
+
+export default { init, genMsgNumData, genTimeData }
