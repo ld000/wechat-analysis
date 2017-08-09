@@ -8,6 +8,8 @@ node 6.x+
 
 ## How to use
 
+### 导出数据库
+
 首先需要导出微信的 sqlite 数据库
 
 先将 iPhone 连接电脑，然后备份到本地
@@ -22,13 +24,16 @@ Application Domains - com.tencent.xin - Documents - [MD5] - DB - MM.sqlite, WCDB
 
 TODO 补图。。。。。。。。
 
+### 运行
 
+`npm install`
+
+`npm start`
+
+然后打开 `pages/index.html` 即可看到效果
 
 ## TODO list
 
-- 代码优化
-- 数据发送方式：express 服务器 或者 替换到 js 文件里？
-- pages webpack
 - 用户名 MD5 解析
 - 关键词文字云
 - 信息类型 chart

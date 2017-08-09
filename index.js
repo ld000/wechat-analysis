@@ -2,24 +2,10 @@ import fs from 'fs'
 import path from 'path'
 import nodejieba from "nodejieba"
 import initData from './src/initData.js'
+import _ from './config/config.js'
 
 const sqlite3 = new require('sqlite3').verbose()
-const db = new sqlite3.Database('./data/MM.sqlite')
-
-const TABLE_NAME = 'Chat_afa40067cf83d63eb9fbdc2933ae463d'
-const MY_NICKNAME = 'tree_1111'
-
-const TYPES = {
-  systemMsg: 10000,   // 系统消息
-  voiceMsg: 34,       // 语音
-  emoji: 47,          // 表情
-  videoMsg: 43,       // 小视频
-  voipinviteMsg: 50,  // 视频/语音通话
-  picture: 3,         // 图片
-  location: 48,       // 位置
-  idCard: 42,         // 名片
-  url: 49             // 链接
-}
+const db = new sqlite3.Database(_.DB_PATH)
 
 var result = {}
 
@@ -29,7 +15,7 @@ function subMsg(msg, time, type, des) {
   let message
 
   if (des === 0) {
-    nickName = MY_NICKNAME
+    nickName = _.MY_NICKNAME
     message = switchType(msg, type)
   } else {
     let msgArray = msg.split(':\n')
@@ -55,23 +41,23 @@ function subMsg(msg, time, type, des) {
 }
 
 function switchType(msg, type) {
-  if (type === TYPES.voiceMsg) {
+  if (type === _.TYPES.voiceMsg) {
     return '[voiceMsg]'
   }
 
-  if (type === TYPES.emoji) {
+  if (type === _.TYPES.emoji) {
     return '[emoji]'
   }
 
-  if (type === TYPES.voipinviteMsg) {
+  if (type === _.TYPES.voipinviteMsg) {
     return '[voipinviteMsg]'
   }
 
-  if (type === TYPES.picture) {
+  if (type === _.TYPES.picture) {
     return '[picture]'
   }
 
-  if (type === TYPES.idCard) {
+  if (type === _.TYPES.idCard) {
     return '[idCard]'
   }
 
@@ -79,11 +65,11 @@ function switchType(msg, type) {
 }
 
 db.serialize(function() {
-  db.each('SELECT CreateTime, Message, Type, Des FROM ' + TABLE_NAME, function(err, row) {
-    if (row.Type === TYPES.systemMsg
-      || row.Type == TYPES.location
-      || row.Type == TYPES.url
-      || row.Type == TYPES.videoMsg) {
+  db.each('SELECT CreateTime, Message, Type, Des FROM ' + _.TABLE_NAME, function(err, row) {
+    if (row.Type === _.TYPES.systemMsg
+      || row.Type == _.TYPES.location
+      || row.Type == _.TYPES.url
+      || row.Type == _.TYPES.videoMsg) {
       return false
     }
 
