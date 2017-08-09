@@ -33,6 +33,7 @@ TODO 补图。。。。。。。。
 - 关键词文字云
 - 信息类型 chart
 - 表情 chart
+- @次数统计
 - user tags
 - es?
 - 。。。
