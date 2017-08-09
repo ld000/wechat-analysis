@@ -2,6 +2,10 @@
 
 微信聊天记录分析 dashboard
 
+## 环境
+
+node 6.x+
+
 ## How to use
 
 首先需要导出微信的 sqlite 数据库

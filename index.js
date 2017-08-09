@@ -3,6 +3,7 @@ const fs = require('fs')
 const path = require('path')
 const moment = require('moment')
 const nodejieba = require("nodejieba")
+const initData = require('./src/initData.js')
 
 const db = new sqlite3.Database('./data/MM.sqlite')
 
@@ -106,95 +107,52 @@ db.serialize(function() {
 })
 
 db.close(() => {
-  // pie
-  // let pieData = {
-  //   values: [],
-  //   labels: []
-  // }
+  initData.init()
+
+  initData.genMsgNumData(result)
+  initData.genTimeData(result)
+
+
+  // nodejieba.load({
+  //   userDict: './dict/user.dict.utf8',
+  // });
   //
   // for (let key in result) {
-  //   pieData.values.push(result[key].length)
-  //   pieData.labels.push(key)
-  // }
-  //
-  // console.log(pieData)
-  //
-  // // fs.readFile(path.join(__dirname, 'pages/pie.js'), 'utf8', function (err,data) {
-  // //   if (err) {
-  // //     return console.log(err)
-  // //   }
-  // //
-  // //   var result = data.replace('{{ data }}', JSON.stringify(pieData))
-  // //
-  // //   fs.writeFile(someFile, result, 'utf8', function (err) {
-  // //      if (err) return console.log(err)
-  // //   })
-  // // })
-
-
-
-  // bar
-  // let barData = {
-  //   x: ['0-2', '2-4', '4-6', '6-8', '8-10', '10-12', '12-14', '14-16', '16-18', '18-20', '20-22', '22-24'],
-  //   y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0],
-  //   name: '',
-  //   type: 'bar'
-  // }
-  //
-  // for (let key in result) {
-  //   let obj = Object.assign({}, barData, { name: key, y: [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0] })
+  //   let obj = {}
   //
   //   result[key].map(e => {
-  //     let hour = moment.unix(e.time).hour()
+  //     let cut = nodejieba.cut(e.msg)
   //
-  //     let index = Math.floor(hour / 2)
-  //     obj.y[index]++
+  //     cut.map(el => {
+  //       let count = obj[el]
+  //       if (count) {
+  //         count++
+  //         obj[el] = count
+  //       } else {
+  //         obj[el] = 1
+  //       }
+  //     })
   //   })
   //
-  //   console.log(obj)
+  //   let list = []
+  //   for (let key2 in obj) {
+  //     list.push({
+  //       text: key2,
+  //       size: obj[key2]
+  //     })
+  //   }
+  //
+  //   list.sort(function(a,b) {
+  //    return b.size - a.size
+  //   })
+  //   list = list.slice(0, 250)
+  //
+  //   fs.writeFile(path.join(__dirname, key + '.result.json'), JSON.stringify(list), err => {
+  //     if (err) {
+  //       throw err
+  //     }
+  //   })
   // }
-
-
-  nodejieba.load({
-    userDict: './dict/user.dict.utf8',
-  });
-
-  for (let key in result) {
-    let obj = {}
-
-    result[key].map(e => {
-      let cut = nodejieba.cut(e.msg)
-
-      cut.map(el => {
-        let count = obj[el]
-        if (count) {
-          count++
-          obj[el] = count
-        } else {
-          obj[el] = 1
-        }
-      })
-    })
-
-    let list = []
-    for (let key2 in obj) {
-      list.push({
-        text: key2,
-        size: obj[key2]
-      })
-    }
-
-    list.sort(function(a,b) {
-     return b.size - a.size
-    })
-    list = list.slice(0, 250)
-
-    fs.writeFile(path.join(__dirname, key + '.result.json'), JSON.stringify(list), err => {
-      if (err) {
-        throw err
-      }
-    })
-  }
 
 
   // const dir = path.join(__dirname, 'pages/json')
