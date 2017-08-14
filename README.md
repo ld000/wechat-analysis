@@ -24,6 +24,8 @@ Application Domains - com.tencent.xin - Documents - [MD5] - DB - MM.sqlite, WCDB
 
 TODO 补图。。。。。。。。
 
+然后放入 `./data` 文件夹中
+
 ### 运行
 
 `npm install`
